@@ -1,0 +1,181 @@
+managed implementation in class zbp_i_expensereport unique;
+strict ( 2 );
+with draft;
+
+
+define behavior for ZI_EXPENSEREPORT alias ExpenseReport
+persistent table zexp_report
+draft table zexp_report_d
+lock master total etag LastChangedAt
+authorization master ( instance )
+etag master LastChangedAt
+
+
+
+{
+  create;
+  update ( features : instance );
+  delete ( features : instance );
+
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+
+
+  determination SetReportID on save { create; }
+  determination SetInitialStatus on modify { create; }
+  determination SetDepartmentFromEmployee on modify { field EmployeeID; }
+  internal action recalcTotalPrice;
+  determination SetDefaultCurrency on save { create; }
+
+
+  validation CheckBudget on save { field TotalAmount; }
+
+
+  action ( features : instance ) Submit result [1] $self;
+  action ( features : instance ) ManagerApprove result [1] $self;
+  action ( features : instance ) ManagerReject result [1] $self;
+  action ( features : instance ) FinanceApprove result [1] $self;
+  action ( features : instance ) FinanceReject result [1] $self;
+  action ( features : instance ) MarkAsPaid result [1] $self;
+
+
+
+
+  field ( readonly, numbering : managed ) ReportUUID;
+  field ( readonly ) ReportID, Status, TotalAmount, Department, EmployeeName;
+
+  field ( features : instance ) EmployeeID, PeriodStart;
+
+
+
+  mapping for zexp_report corresponding
+    {
+      ReportUUID         = report_uuid;
+      ReportID           = report_id;
+      EmployeeID         = employee_id;
+      Department         = department;
+      PeriodStart        = period_start;
+      TotalAmount        = total_amount;
+      Currency           = currency;
+      Status             = status;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+
+  association _Item { create ( features : instance ); with draft; }
+  association _ApprovalLog  { create; with draft; }
+}
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////   ITEM  /////////////////////////////////////////
+
+define behavior for ZI_EXPENSEITEM alias ExpenseItem
+persistent table zexp_item_od
+draft table zexp_item_od_d
+lock dependent by _Report
+authorization dependent by _Report
+etag master LastChangedAt
+
+{
+  update;
+  delete;
+
+  field ( readonly, numbering : managed ) ItemUUID;
+  field ( readonly ) ParentUUID;
+  field ( mandatory ) ExpenseDate;
+
+
+  determination RecalcTotalAmount on modify { create; update; }
+  determination CalculateTotalAmountDelete on save { delete; }
+  determination SetItemCurrency on save { create; }
+
+
+  validation CheckPolicyLimit on save { field Amount, Category, ExpenseDate; }
+  validation CheckExpenseDate on save { create; field ExpenseDate; }
+  validation CheckItemCreatable      on save { create; }
+  validation CheckItemUpdatable      on save { create; update; }
+  validation CheckItemEditableDelete on save { delete; }
+
+  determination LogItemUpdate        on save { create; update; }
+
+
+
+
+  side effects
+    {
+      field Amount affects field _Report.TotalAmount;
+    }
+
+
+
+  mapping for zexp_item_od corresponding
+    {
+      ItemUUID           = item_uuid;
+      ParentUUID         = parent_uuid;
+      ItemID             = item_id;
+      Category           = category;
+      Amount             = amount;
+      Currency           = currency;
+      ExpenseDate        = expense_date;
+      ReceiptRef         = receipt_ref;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+
+  association _Report { with draft; }
+}
+
+
+
+////////////////////// APPROVALLOG ////////////////////////////////////
+
+
+define behavior for ZI_EXPAPPRLOG alias ApprovalLog
+persistent table zexp_apprlog
+draft table zexp_apprlog_d
+lock dependent by _Report
+authorization dependent by _Report
+etag master LastChangedAt
+
+{
+  field ( readonly, numbering : managed ) LogUUID;
+  field ( readonly ) ParentUUID;
+
+  mapping for zexp_apprlog corresponding
+    {
+      LogUUID            = log_uuid;
+      ParentUUID         = parent_uuid;
+      LogID              = log_id;
+      ApproverID         = approver_id;
+      Action             = action;
+      ActionComment      = action_comment;
+      ActionAt           = action_at;
+      LocalCreatedBy     = local_created_by;
+      LocalCreatedAt     = local_created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+
+  association _Report { with draft; }
+}
