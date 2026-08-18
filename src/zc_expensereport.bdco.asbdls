@@ -1,0 +1,61 @@
+projection;
+strict ( 2 );
+use draft;
+use side effects;
+
+define behavior for ZC_EXPENSEREPORT alias ExpenseReport
+use etag
+
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+  use action Submit;
+  use action ManagerApprove;
+  use action ManagerReject;
+  use action FinanceApprove;
+  use action FinanceReject;
+  use action MarkAsPaid;
+
+
+
+  use association _Item        { create; with draft; }
+  use association _ApprovalLog { create; with draft; }
+}
+
+
+
+
+
+/////////////////////////// ITEM //////////////////////////////
+
+
+
+
+define behavior for ZC_EXPENSEITEM alias ExpenseItem
+use etag
+
+{
+  use update;
+  use delete;
+
+  use association _Report { with draft; }
+}
+
+
+
+
+
+//////////////////////// APPROVALLOG ////////////////
+
+define behavior for ZC_EXPAPPRLOG alias ApprovalLog
+
+{
+  use association _Report;
+}
