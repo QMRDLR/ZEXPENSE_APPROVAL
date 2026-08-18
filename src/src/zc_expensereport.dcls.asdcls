@@ -1,0 +1,6 @@
+@MappingRole: true
+@EndUserText.label: 'Expense Report Projection Access Control'
+define role ZC_EXPENSEREPORT {
+  grant select on ZC_EXPENSEREPORT
+    where inheriting conditions from entity ZI_EXPENSEREPORT;
+}
