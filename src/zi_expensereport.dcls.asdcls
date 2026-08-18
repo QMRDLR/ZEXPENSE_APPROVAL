@@ -1,7 +1,0 @@
-@MappingRole: true
-@EndUserText.label: 'Expense Report Access Control'
-
-define role ZI_EXPENSEREPORT {
-  grant select on ZI_EXPENSEREPORT
-    where LocalCreatedBy = aspect user;
-}
