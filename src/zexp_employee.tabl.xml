@@ -1,0 +1,18 @@
+@EndUserText.label : 'Employee Master Data'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zexp_employee {
+
+  key client            : abap.clnt not null;
+  key employee_id       : abap.char(10) not null;
+  employee_name         : abap.char(40);
+  department_id         : abap.char(10);
+  local_created_by      : abp_creation_user;
+  local_created_at      : abp_creation_tstmpl;
+  local_last_changed_by : abp_locinst_lastchange_user;
+  local_last_changed_at : abp_locinst_lastchange_tstmpl;
+  last_changed_at       : abp_lastchange_tstmpl;
+
+}
