@@ -1,0 +1,12 @@
+@EndUserText.label: 'Expense Report Service'
+define service ZEXP_SD_REPORT {
+  expose ZC_EXPENSEREPORT      as ExpenseReport;
+  expose ZC_EXPENSEITEM        as ExpenseItem;
+  expose ZC_EXPEMPLOYEE        as Employee;
+  expose ZC_EXPDEPARTMENT      as Department;
+  expose ZC_EXPSTATUS          as Status;
+  expose ZC_EXPPOLICY          as Policy;
+  expose ZC_EXPANALYTICS       as Analytics;
+  expose ZC_EXPAPPRLOG         as ApprovalLog;
+  expose ZC_EXPSTATUSANALYTICS as StatusAnalytics;
+}
