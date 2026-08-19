@@ -1,0 +1,106 @@
+@Metadata.layer: #CORE
+
+@UI.headerInfo: {
+  typeName: 'Expense Report',
+  typeNamePlural: 'Expense Reports',
+  title: { type: #STANDARD, value: 'ReportID' }
+}
+
+
+@UI.presentationVariant: [{ sortOrder: [{ by: 'ReportID', direction: #ASC }],
+  visualizations: [{ type: #AS_LINEITEM }]}]
+
+annotate entity ZC_EXPENSEREPORT with
+{
+  @UI.facet: [
+    { id: 'GeneralInfo',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'General Information',
+      position: 10 },
+    { id: 'Items',
+      purpose: #STANDARD,
+      type: #LINEITEM_REFERENCE,
+      label: 'Expense Items',
+      targetElement: '_Item',
+      position: 20 },
+      { id: 'ApprovalHistory',
+      purpose: #STANDARD,
+      type: #LINEITEM_REFERENCE,
+      label: 'Approval History',
+      targetElement: '_ApprovalLog',
+      position: 30 }
+  ]
+
+
+
+
+  @UI.lineItem: [ { position: 10, importance: #HIGH }]
+  @UI.identification: [
+    { position: 10 },
+    { type: #FOR_ACTION, dataAction: 'MarkAsPaid', label: 'Mark As Paid' },
+    { type: #FOR_ACTION, dataAction: 'FinanceReject', label: 'Finance Reject' },
+    { type: #FOR_ACTION, dataAction: 'FinanceApprove', label: 'Finance Approve' },
+    { type: #FOR_ACTION, dataAction: 'ManagerReject', label: 'Manager Reject' },
+    { type: #FOR_ACTION, dataAction: 'ManagerApprove', label: 'Manager Approve' },
+    { type: #FOR_ACTION, dataAction: 'Submit', label: 'Submit' }
+  ]
+  @UI.selectionField: [ { position: 10 } ]
+  @EndUserText.label: 'Report ID'
+  ReportID;
+
+
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZC_EXPEMPLOYEE', element: 'EmployeeID' } }]
+  @UI.lineItem: [ { position: 20, importance: #HIGH } ]
+  @UI.identification: [ { position: 20 } ]
+  @UI.selectionField: [ { position: 20 } ]
+  @EndUserText.label: 'Employee ID'
+  EmployeeID;
+
+
+
+  @UI.lineItem: [ { position: 25, importance: #HIGH } ]
+  @UI.identification: [ { position: 25 } ]
+  @EndUserText.label: 'Employee Name'
+  EmployeeName;
+
+
+
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZC_EXPDEPARTMENT', element: 'DepartmentID' } }]
+  @UI.lineItem: [ { position: 30, importance: #HIGH } ]
+  @UI.identification: [ { position: 30 } ]
+  @UI.selectionField: [ { position: 30 } ]
+  @EndUserText.label: 'Department'
+  Department;
+
+
+  @UI.lineItem: [ { position: 40, importance: #HIGH } ]
+  @UI.identification: [ { position: 40 } ]
+  @EndUserText.label: 'Period Start'
+  PeriodStart;
+
+  @UI.lineItem: [ { position: 50, importance: #HIGH } ]
+  @UI.identification: [ { position: 50 } ]
+  @EndUserText.label: 'Total Amount'
+  TotalAmount;
+
+
+  
+  @UI.hidden: true
+  Currency;
+
+
+
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZC_EXPSTATUS', element: 'StatusCode' } }]
+  @UI.textArrangement: #TEXT_LAST
+  @UI.lineItem: [ { position: 60, importance: #HIGH, criticality: 'StatusCriticality', criticalityRepresentation: #WITH_ICON } ]
+  @UI.identification: [ { position: 60, criticality: 'StatusCriticality', criticalityRepresentation: #WITH_ICON } ]
+  @EndUserText.label: 'Status'
+  Status;
+
+  @UI.hidden: true
+  StatusText;
+
+  @UI.hidden: true
+  StatusCriticality;
+}
