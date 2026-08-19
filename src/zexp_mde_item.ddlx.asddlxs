@@ -1,0 +1,43 @@
+@Metadata.layer: #CORE
+
+
+@UI: {
+  presentationVariant: [{
+    sortOrder: [{ by: 'ItemID', direction: #ASC }]
+  }]
+}
+
+annotate entity ZC_EXPENSEITEM with
+{
+  @UI.lineItem: [ { position: 10, importance: #HIGH } ]
+  @UI.identification: [ { position: 10 } ]
+  @EndUserText.label: 'Item ID'
+  ItemID;
+
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZC_EXPPOLICY', element: 'Category' } }]
+  @UI.lineItem: [ { position: 20, importance: #HIGH } ]
+  @UI.identification: [ { position: 20 } ]
+  @UI.selectionField: [ { position: 10 } ]
+  @EndUserText.label: 'Category'
+  Category;
+
+  @UI.lineItem: [ { position: 30, importance: #HIGH } ]
+  @UI.identification: [ { position: 30 } ]
+  @EndUserText.label: 'Amount'
+  Amount;
+
+
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'I_Currency', element: 'Currency' } }]
+  @UI.hidden: true
+  Currency;
+
+  @UI.lineItem: [ { position: 40 } ]
+  @UI.identification: [ { position: 40 } ]
+  @EndUserText.label: 'Expense Date'
+  ExpenseDate;
+
+  @UI.lineItem: [ { position: 50 } ]
+  @UI.identification: [ { position: 50 } ]
+  @EndUserText.label: 'Receipt Reference'
+  ReceiptRef;
+}
