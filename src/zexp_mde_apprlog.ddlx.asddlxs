@@ -1,0 +1,21 @@
+@Metadata.layer: #CORE
+
+annotate entity ZC_EXPAPPRLOG with
+
+{
+  @UI.lineItem: [{ position: 10 }]
+  @EndUserText.label: 'Action'
+  Action;
+
+  @UI.lineItem: [{ position: 20 }]
+  @EndUserText.label: 'Comment'
+  ActionComment;
+
+  @UI.lineItem: [{ position: 30 }]
+  @EndUserText.label: 'Approver'
+  ApproverID;
+
+  @UI.lineItem: [{ position: 40 }]
+  @EndUserText.label: 'Date/Time'
+  ActionAt;
+}
