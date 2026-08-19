@@ -1,0 +1,12 @@
+@EndUserText.label : 'Status Code Master Data'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zexp_status_t {
+
+  key client      : abap.clnt not null;
+  key status_code : abap.char(2) not null;
+  status_text     : abap.char(40);
+
+}
