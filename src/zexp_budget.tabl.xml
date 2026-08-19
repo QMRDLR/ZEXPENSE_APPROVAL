@@ -1,0 +1,24 @@
+@EndUserText.label : 'Department Budget'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zexp_budget {
+
+  key client            : abap.clnt not null;
+  key budget_uuid       : sysuuid_x16 not null;
+  budget_id             : abap.char(10);
+  department            : abap.char(10);
+  period_start          : abap.dats;
+  @Semantics.amount.currencyCode : 'zexp_budget.currency'
+  limit_amount          : abap.curr(13,2);
+  @Semantics.amount.currencyCode : 'zexp_budget.currency'
+  spent_amount          : abap.curr(13,2);
+  currency              : abap.cuky;
+  local_created_by      : abp_creation_user;
+  local_created_at      : abp_creation_tstmpl;
+  local_last_changed_by : abp_locinst_lastchange_user;
+  local_last_changed_at : abp_locinst_lastchange_tstmpl;
+  last_changed_at       : abp_lastchange_tstmpl;
+
+}
